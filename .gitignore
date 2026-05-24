@@ -1,0 +1,6 @@
+build/
+JUCE/
+*.xcodeproj/
+*.xcworkspace/
+.DS_Store
+
