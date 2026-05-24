@@ -45,7 +45,7 @@ void KawaiiDriveAudioProcessorEditor::paint(juce::Graphics& g)
 
     g.setColour(juce::Colour(0xff2f2b28));
     g.setFont(juce::FontOptions(30.0f, juce::Font::bold));
-    g.drawText("Kawaii Drive", 28, 22, getWidth() - 56, 42, juce::Justification::centredLeft);
+    g.drawText("Kawaii Hizumi", 28, 22, getWidth() - 56, 42, juce::Justification::centredLeft);
 
     g.setFont(juce::FontOptions(14.0f));
     g.setColour(juce::Colour(0xff5d5751));
@@ -78,4 +78,3 @@ void KawaiiDriveAudioProcessorEditor::resized()
     mixSlider.setBounds(knobArea.removeFromLeft(knobWidth).reduced(10, 0));
     outputSlider.setBounds(knobArea.removeFromLeft(knobWidth).reduced(10, 0));
 }
-
