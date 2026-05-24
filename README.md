@@ -6,7 +6,9 @@ Kawaii Hizumi is a small soft-clip distortion plugin built with JUCE.
 - macOS Studio One: AU or VST3
 - Windows Studio One: VST3
 - Build system: CMake + JUCE
-- Controls: Drive, Tone, Mix, and Output
+- Controls: Drive, Tone, Mix, Output, and Auto Mix
+
+Auto Mix keeps the apparent balance steadier by lowering the effective Mix amount as Drive rises.
 
 ## Setup
 

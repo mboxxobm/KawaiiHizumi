@@ -7,19 +7,22 @@ KawaiiDriveAudioProcessorEditor::KawaiiDriveAudioProcessorEditor(KawaiiDriveAudi
     configureKnob(toneSlider, " Hz");
     configureKnob(mixSlider, "%");
     configureKnob(outputSlider, " dB");
+    configureButton(autoMixButton);
 
     addAndMakeVisible(driveSlider);
     addAndMakeVisible(toneSlider);
     addAndMakeVisible(mixSlider);
     addAndMakeVisible(outputSlider);
+    addAndMakeVisible(autoMixButton);
 
     driveAttachment = std::make_unique<SliderAttachment>(audioProcessor.parameters, "drive", driveSlider);
     toneAttachment = std::make_unique<SliderAttachment>(audioProcessor.parameters, "tone", toneSlider);
     mixAttachment = std::make_unique<SliderAttachment>(audioProcessor.parameters, "mix", mixSlider);
     outputAttachment = std::make_unique<SliderAttachment>(audioProcessor.parameters, "output", outputSlider);
+    autoMixAttachment = std::make_unique<ButtonAttachment>(audioProcessor.parameters, "autoMix", autoMixButton);
 
     setResizable(false, false);
-    setSize(520, 300);
+    setSize(520, 330);
 }
 
 void KawaiiDriveAudioProcessorEditor::configureKnob(juce::Slider& slider, const juce::String& suffix)
@@ -32,6 +35,15 @@ void KawaiiDriveAudioProcessorEditor::configureKnob(juce::Slider& slider, const 
     slider.setColour(juce::Slider::thumbColourId, juce::Colour(0xff2f2b28));
     slider.setColour(juce::Slider::textBoxOutlineColourId, juce::Colours::transparentBlack);
     slider.setColour(juce::Slider::textBoxTextColourId, juce::Colour(0xff2f2b28));
+}
+
+void KawaiiDriveAudioProcessorEditor::configureButton(juce::ToggleButton& button)
+{
+    button.setButtonText("Auto Mix");
+    button.setTooltip("Lower the effective Mix as Drive rises.");
+    button.setColour(juce::ToggleButton::textColourId, juce::Colour(0xff2f2b28));
+    button.setColour(juce::ToggleButton::tickColourId, juce::Colour(0xfff09a9d));
+    button.setColour(juce::ToggleButton::tickDisabledColourId, juce::Colour(0xff8a827a));
 }
 
 void KawaiiDriveAudioProcessorEditor::paint(juce::Graphics& g)
@@ -77,4 +89,7 @@ void KawaiiDriveAudioProcessorEditor::resized()
     toneSlider.setBounds(knobArea.removeFromLeft(knobWidth).reduced(10, 0));
     mixSlider.setBounds(knobArea.removeFromLeft(knobWidth).reduced(10, 0));
     outputSlider.setBounds(knobArea.removeFromLeft(knobWidth).reduced(10, 0));
+
+    area.removeFromTop(18);
+    autoMixButton.setBounds(area.withHeight(28).withTrimmedLeft(10));
 }

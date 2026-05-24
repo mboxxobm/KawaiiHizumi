@@ -41,6 +41,7 @@ private:
     std::atomic<float>* toneParam = nullptr;
     std::atomic<float>* mixParam = nullptr;
     std::atomic<float>* outputParam = nullptr;
+    std::atomic<float>* autoMixParam = nullptr;
 
     juce::dsp::ProcessorDuplicator<juce::dsp::IIR::Filter<float>,
                                    juce::dsp::IIR::Coefficients<float>> toneFilter;
@@ -49,4 +50,3 @@ private:
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(KawaiiDriveAudioProcessor)
 };
-

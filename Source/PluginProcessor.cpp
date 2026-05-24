@@ -1,6 +1,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include <cmath>
+
 KawaiiDriveAudioProcessor::KawaiiDriveAudioProcessor()
     : AudioProcessor(BusesProperties()
         .withInput("Input", juce::AudioChannelSet::stereo(), true)
@@ -11,6 +13,7 @@ KawaiiDriveAudioProcessor::KawaiiDriveAudioProcessor()
     toneParam = parameters.getRawParameterValue("tone");
     mixParam = parameters.getRawParameterValue("mix");
     outputParam = parameters.getRawParameterValue("output");
+    autoMixParam = parameters.getRawParameterValue("autoMix");
 }
 
 juce::AudioProcessorValueTreeState::ParameterLayout KawaiiDriveAudioProcessor::createParameterLayout()
@@ -28,6 +31,9 @@ juce::AudioProcessorValueTreeState::ParameterLayout KawaiiDriveAudioProcessor::c
 
     params.push_back(std::make_unique<juce::AudioParameterFloat>(
         "output", "Output", juce::NormalisableRange<float>(-24.0f, 12.0f, 0.1f), -3.0f));
+
+    params.push_back(std::make_unique<juce::AudioParameterBool>(
+        "autoMix", "Auto Mix", false));
 
     return { params.begin(), params.end() };
 }
@@ -70,7 +76,10 @@ void KawaiiDriveAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, j
         buffer.clear(channel, 0, buffer.getNumSamples());
 
     const auto drive = driveParam->load();
-    const auto wet = mixParam->load() / 100.0f;
+    const auto requestedWet = mixParam->load() / 100.0f;
+    const auto driveBalance = static_cast<float>(std::log(drive) / std::log(24.0f));
+    const auto autoMixCompensation = juce::jmap(juce::jlimit(0.0f, 1.0f, driveBalance), 1.0f, 0.42f);
+    const auto wet = autoMixParam->load() > 0.5f ? requestedWet * autoMixCompensation : requestedWet;
     const auto dry = 1.0f - wet;
     const auto outputGain = juce::Decibels::decibelsToGain(outputParam->load());
     const auto makeup = 1.0f / std::tanh(drive);
@@ -121,4 +130,3 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new KawaiiDriveAudioProcessor();
 }
-
